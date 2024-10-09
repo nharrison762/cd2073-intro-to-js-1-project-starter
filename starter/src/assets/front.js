@@ -134,6 +134,10 @@ document.querySelector('.pay').addEventListener('click', (e) => {
         `;
     }
 
+//  fix for cart not refreshing after checkout
+drawCart();
+drawCheckout();
+
     paymentSummary.append(div);
 });
 
