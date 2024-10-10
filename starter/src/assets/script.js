@@ -14,7 +14,7 @@ const cherry = {
   name: "cherry",
   price: 3,
   quantity: 0,
-  productId: 0,
+  productId: 100,
   image: "/images/cherry.jpg"
 };
 
@@ -22,21 +22,21 @@ const orange = {
   name: "orange",
   price: 1,
   quantity: 0,
-  productId: 1,
-  image: "/images/cherry.jpg"
+  productId: 101,
+  image: "/images/orange.jpg"
 };
 
 const strawberry = {
   name: "strawberry",
   price: 2,
   quantity: 0,
-  productId: 2,
-  image: "/images.strawberry.jpg"
+  productId: 102,
+  image: "/images/strawberry.jpg"
 };
 
-products.push(cherry);
+products.push(cherry); //add products to array so it doesnt freak out
 products.push(orange);
-products.push(strawberry);  //add product listings to inventory
+products.push(strawberry);
 
 /* Images provided in /images folder. All images from Unsplash.com
    - cherry.jpg by Mae Mu
@@ -53,10 +53,27 @@ const cart = [];
   - if the product is not already in the cart, add it to the cart
 */
 function addProductToCart(productId){
-  if (cart.productId.quantity === 0) {
-    cart.productId.quantity = 1;
-  } else {
-  cart.productId.quantity++; //using productId as the index in cart
+  if (productId === 100) { //productId is the same as SKU, check for item
+    if (cherry.quantity === 0) { //if none of the SKU is in the cart, add one
+      cart.push(cherry); //add fruit to cart
+      cherry.quantity++; //increase from 0 to 1 fruit
+    } else { //if SKU is in cart, add another
+    cherry.quantity++;
+    }
+  } else if (productId === 101) {
+    if (orange.quantity === 0) {
+      cart.push(orange);
+      orange.quantity++;
+    } else {
+      orange.quantity++;
+    }
+  } else { //only 3 fruits, so this must be a strawberry
+    if (strawberry.quantity === 0) {
+    cart.push(strawberry);
+    strawberry.quantity++;
+    } else {
+    strawberry.quantity++;
+    }
   }
 };
 
@@ -65,7 +82,13 @@ function addProductToCart(productId){
   - increaseQuantity should then increase the product's quantity
 */
 function increaseQuantity(productId){
-  cart.productId.quantity++;
+  if (productId === 100) { //check item SKU
+    cherry.quantity++; //add fruit to cart
+  } else if (productId === 101) {
+    orange.quantity++;
+    } else {
+    strawberry.quantity++;
+  }
 };
 
 /* Create a function named decreaseQuantity that takes in the productId as an argument
@@ -74,7 +97,28 @@ function increaseQuantity(productId){
   - if the function decreases the quantity to 0, the product is removed from the cart
 */
 function decreaseQuantity(productId){
-  cart.productId.quantity++;
+  if (productId === 100) { //check item SKU
+    if (cherry.quantity > 1) { //check fruit quantity for removal
+      cherry.quantity--;
+    } else { //if quantity reduced to zero, remove from cart
+      cherry.quantity = 0;
+      cart.splice(cart.cherry, 1); //begin splice at fruit location (can't believe that works)
+    }
+  } else if (productId === 101) {
+    if (orange.quantity > 1) {
+      orange.quantity--;
+    } else {
+      orange.quantity = 0;
+      cart.splice(cart.orange, 1);
+    }
+  } else {
+    if (strawberry.quantity > 1) {
+      strawberry.quantity--;
+    } else {
+      strawberry.quantity = 0;
+      cart.splice(cart.strawberry, 1);
+    }
+  }
 };
 
 /* Create a function named removeProductFromCart that takes in the productId as an argument
@@ -83,10 +127,15 @@ function decreaseQuantity(productId){
   - removeProductFromCart should remove the product from the cart
 */
 function removeProductFromCart(productId){
-  if (cart.productId.quantity === 1 || cart.productId.quantity === 0) {
-    cart.productId.quantity = 0;
-  } else {
-  cart.productId.quantity--; //using productId as the index in cart
+  if (productId === 100) { //check item SKU
+    cherry.quantity = 0; //set amount of fruit to zero
+    cart.splice(cart.cherry, 1); //remove respective SKU from cart
+  } else if (productId === 101) {
+    orange.quantity = 0;
+    cart.splice(cart.orange, 1);
+    } else {
+    strawberry.quantity = 0;
+    cart.splice(cart.strawberry, 1);
   }
 };
 
@@ -96,12 +145,19 @@ function removeProductFromCart(productId){
   Hint: price and quantity can be used to determine total cost
 */
 function cartTotal(){
-
+  let total = 0; //initialize total
+  products.forEach(fruit => { //for each SKU add price times quantity to total
+    total += fruit.quantity * fruit.price;
+  });
+  return total;
 };
 
 /* Create a function called emptyCart that empties the products from the cart */
 function emptyCart(){
-
+  products.forEach(fruit => {
+    fruit.quantity = 0;  //zero fruit quantity
+    cart.splice(cart.fruit, 1); //remove fruit by splicing at fruit location
+  });
 };
 
 /* Create a function named pay that takes in an amount as an argument
