@@ -1,4 +1,4 @@
-let totalPaid = 0; //this should probably be up top
+let totalPaid = 0; //global variable to hold payment balance
 
 /* Create an array named products which you will use to add all of your product object literals that you create in the next step. */
 const products = [];
@@ -12,7 +12,7 @@ const products = [];
    - image: picture of product (url string)
 */
 
-const cherry = {
+const cherry = { //creating objects
   name: "cherry",
   price: 3,
   quantity: 0,
@@ -54,43 +54,30 @@ const cart = [];
   - addProductToCart should then increase the product's quantity
   - if the product is not already in the cart, add it to the cart
 */
-function addProductToCart(productId){
-  if (productId === 100) { //productId is the same as SKU, check for item
-    if (cherry.quantity === 0) { //if none of the SKU is in the cart, add one
-      cart.push(cherry); //add fruit to cart
-      cherry.quantity = 1; //increase from 0 to 1 fruit
-    } else { //if SKU is in cart, add another
-    cherry.quantity++;
-    }
-  } else if (productId === 101) { //for each fruit if fruit.productid === parameter do math
-    if (orange.quantity === 0) {
-      cart.push(orange);
-      orange.quantity = 1;
-    } else {
-      orange.quantity++;
-    }
-  } else if (productId === 102) {
-    if (strawberry.quantity === 0) {
-    cart.push(strawberry);
-    strawberry.quantity = 1;
-    } else {
-    strawberry.quantity++;
-    }
-  }
+function addProductToCart(SKU){ //find fruit by internal ID
+   products.forEach(fruit => {
+     if (SKU === fruit.productId) {
+       if (fruit.quantity === 0) {
+         cart.push(fruit);
+         fruit.quantity = 1; //add fruit to cart if none present
+       } else {
+         fruit.quantity++;
+       }
+     }
+  });
 };
 
 /* Create a function named increaseQuantity that takes in the productId as an argument
   - increaseQuantity should get the correct product based on the productId
   - increaseQuantity should then increase the product's quantity
 */
-function increaseQuantity(productId){
-  if (productId === 100) { //check item SKU
-    cherry.quantity++; //add fruit to cart
-  } else if (productId === 101) {
-    orange.quantity++;
-    } else if (productId === 102) {
-    strawberry.quantity++;
-  }
+
+function increaseQuantity(SKU){
+  products.forEach(fruit => {
+    if (SKU === fruit.productId) { //find correct fruit and increase
+        fruit.quantity++;
+    }
+ });
 };
 
 /* Create a function named decreaseQuantity that takes in the productId as an argument
@@ -98,45 +85,28 @@ function increaseQuantity(productId){
   - decreaseQuantity should decrease the quantity of the product
   - if the function decreases the quantity to 0, the product is removed from the cart
 */
-function decreaseQuantity(productId){
-  if (productId === 100) { //check item SKU
-    if (cherry.quantity > 1) { //check fruit quantity for removal
-      cherry.quantity--;
-    } else { //if quantity reduced to zero, remove from cart
-      removeProductFromCart(100); //remove item
+
+function decreaseQuantity(SKU){
+  products.forEach(fruit => { //find correct fruit
+    if (SKU === fruit.productId) {
+      if (fruit.quantity > 1) { //decrease if fruit will remain after
+        fruit.quantity--;
+      } else {
+        fruit.quantity = 0; //if fruit is not more than 1, zero quantity and remove
+        removeProductFromCart(SKU);
+      }
     }
-  } else if (productId === 101) {
-    if (orange.quantity > 1) {
-      orange.quantity--;
-    } else {
-      removeProductFromCart(101);
-    }
-  } else if (productId === 102) {
-    if (strawberry.quantity > 1) {
-      strawberry.quantity--;
-    } else {
-      removeProductFromCart(102);
-    }
-  }
+ });
 };
 
-/* Create a function named removeProductFromCart that takes in the productId as an argument
-  - removeProductFromCart should get the correct product based on the productId
-  - removeProductFromCart should update the product quantity to 0
-  - removeProductFromCart should remove the product from the cart
-*/
-function removeProductFromCart(productId){
-  if (productId === 100) { //check item SKU
-    cherry.quantity = 0; //set amount of fruit to zero
-    cart.splice(cart.indexOf(cherry), 1);//remove fruit by index position
-  } else if (productId === 101) {
-    orange.quantity = 0;
-    cart.splice(cart.indexOf(orange), 1);
-  } else if (productId === 102) {
-    strawberry.quantity = 0;
-    cart.splice(cart.indexOf(strawberry), 1);
-  }
-};
+function removeProductFromCart(SKU){
+  products.forEach(fruit => {
+    if (SKU === fruit.productId) { //find the correct product
+      fruit.quantity = 0;
+      cart.splice(cart.indexOf(fruit), 1); //zero out quantity and splice out object
+    }
+  });
+}
 
 /* Create a function named cartTotal that has no parameters
   - cartTotal should iterate through the cart to get the total cost of all products
