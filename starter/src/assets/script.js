@@ -56,21 +56,21 @@ function addProductToCart(productId){
   if (productId === 100) { //productId is the same as SKU, check for item
     if (cherry.quantity === 0) { //if none of the SKU is in the cart, add one
       cart.push(cherry); //add fruit to cart
-      cherry.quantity++; //increase from 0 to 1 fruit
+      cherry.quantity = 1; //increase from 0 to 1 fruit
     } else { //if SKU is in cart, add another
     cherry.quantity++;
     }
   } else if (productId === 101) {
     if (orange.quantity === 0) {
       cart.push(orange);
-      orange.quantity++;
+      orange.quantity = 1;
     } else {
       orange.quantity++;
     }
-  } else { //only 3 fruits, so this must be a strawberry
+  } else if (productId === 102) {
     if (strawberry.quantity === 0) {
     cart.push(strawberry);
-    strawberry.quantity++;
+    strawberry.quantity = 1;
     } else {
     strawberry.quantity++;
     }
@@ -86,7 +86,7 @@ function increaseQuantity(productId){
     cherry.quantity++; //add fruit to cart
   } else if (productId === 101) {
     orange.quantity++;
-    } else {
+    } else if (productId === 102) {
     strawberry.quantity++;
   }
 };
@@ -101,22 +101,19 @@ function decreaseQuantity(productId){
     if (cherry.quantity > 1) { //check fruit quantity for removal
       cherry.quantity--;
     } else { //if quantity reduced to zero, remove from cart
-      cherry.quantity = 0;
-      cart.splice(cart.cherry, 1); //begin splice at fruit location (can't believe that works)
+      removeProductFromCart(100); //remove item
     }
   } else if (productId === 101) {
     if (orange.quantity > 1) {
       orange.quantity--;
     } else {
-      orange.quantity = 0;
-      cart.splice(cart.orange, 1);
+      removeProductFromCart(101);
     }
-  } else {
+  } else if (productId === 102) {
     if (strawberry.quantity > 1) {
       strawberry.quantity--;
     } else {
-      strawberry.quantity = 0;
-      cart.splice(cart.strawberry, 1);
+      removeProductFromCart(102);
     }
   }
 };
@@ -129,13 +126,13 @@ function decreaseQuantity(productId){
 function removeProductFromCart(productId){
   if (productId === 100) { //check item SKU
     cherry.quantity = 0; //set amount of fruit to zero
-    cart.splice(cart.cherry, 1); //remove respective SKU from cart
+    cart.splice(cart.indexOf(cherry), 1);//remove fruit by index position
   } else if (productId === 101) {
     orange.quantity = 0;
-    cart.splice(cart.orange, 1);
-    } else {
+    cart.splice(cart.indexOf(orange), 1);
+  } else if (productId === 102) {
     strawberry.quantity = 0;
-    cart.splice(cart.strawberry, 1);
+    cart.splice(cart.indexOf(strawberry), 1);
   }
 };
 
@@ -156,7 +153,7 @@ function cartTotal(){
 function emptyCart(){
   products.forEach(fruit => {
     fruit.quantity = 0;  //zero fruit quantity
-    cart.splice(cart.fruit, 1); //remove fruit by splicing at fruit location
+    removeProductFromCart(fruit.productId); //remove fruit
   });
 };
 
