@@ -1,3 +1,5 @@
+let totalPaid = 0; //this should probably be up top
+
 /* Create an array named products which you will use to add all of your product object literals that you create in the next step. */
 const products = [];
 
@@ -60,7 +62,7 @@ function addProductToCart(productId){
     } else { //if SKU is in cart, add another
     cherry.quantity++;
     }
-  } else if (productId === 101) {
+  } else if (productId === 101) { //for each fruit if fruit.productid === parameter do math
     if (orange.quantity === 0) {
       cart.push(orange);
       orange.quantity = 1;
@@ -163,8 +165,14 @@ function emptyCart(){
   - pay will return a positive number if money should be returned to customer
   Hint: cartTotal function gives us cost of all the products in the cart  
 */
-function pay(moneyPaid){
 
+function pay(money){ //tip: create total paid as global to track amount after paying
+  totalPaid = totalPaid + money;
+  let remainder = totalPaid - cartTotal(); //calculate how much is left
+  if (remainder > 0) {
+    totalPaid = totalPaid - remainder; //reduce customer debt
+  }
+  return remainder; //return balance to program
 };
 
 /* Place stand out suggestions here (stand out suggestions can be found at the bottom of the project rubric.)*/
